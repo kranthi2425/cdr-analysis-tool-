@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CDR Analysis</title>
+  </head>
+  <body>
+    <h1>Call Detail Records</h1>
+    <table border="1">
+      <tr>
+        <th>Call ID</th>
+        <th>Caller Number</th>
+        <th>Callee Number</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Duration (sec)</th>
+        <th>Type</th>
+      </tr>
+      {% for cdr in cdrs %}
+      <tr>
+        <td>{{ cdr.call_id }}</td>
+        <td>{{ cdr.caller_number }}</td>
+        <td>{{ cdr.callee_number }}</td>
+        <td>{{ cdr.call_start_time }}</td>
+        <td>{{ cdr.call_end_time }}</td>
+        <td>{{ cdr.call_duration }}</td>
+        <td>{{ cdr.call_type }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
