@@ -1,21 +1,6 @@
 import os
 from pathlib import Path
-from decouple import config
-from dotenv import load_dotenv
-from supabase import create_client, Client
-import djongo
-
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Get Supabase credentials
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY')
-
-# url: str = os.environ.get("SUPABASE_URL")
-# key: str = os.environ.get("SUPABASE_KEY")
-# supabase: Client = create_client(url, key)
+# import djongo
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

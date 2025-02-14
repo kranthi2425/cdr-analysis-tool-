@@ -4,28 +4,99 @@
     <title>CDR Analysis</title>
   </head>
   <body>
-    <h1>Call Detail Records</h1>
-    <table border="1">
-      <tr>
-        <th>Call ID</th>
-        <th>Caller Number</th>
-        <th>Callee Number</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Duration (sec)</th>
-        <th>Type</th>
-      </tr>
-      {% for cdr in cdrs %}
-      <tr>
-        <td>{{ cdr.call_id }}</td>
-        <td>{{ cdr.caller_number }}</td>
-        <td>{{ cdr.callee_number }}</td>
-        <td>{{ cdr.call_start_time }}</td>
-        <td>{{ cdr.call_end_time }}</td>
-        <td>{{ cdr.call_duration }}</td>
-        <td>{{ cdr.call_type }}</td>
-      </tr>
-      {% endfor %}
+    {% block content %}
+    <h2>Add New Call Record</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Add Call Record</button>
+    </form>
+
+    <h2>Upload CSV File</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %} {{ csv_form.as_p }}
+      <button type="submit">Upload CSV</button>
+    </form>
+
+    <h2>Search Call Records</h2>
+    <form method="get">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search..." />
+      <button type="submit">Search</button>
+    </form>
+
+    <h2>Filter Suspect Calls</h2>
+    <form method="get">
+      <input
+        type="text"
+        name="suspect_keywords"
+        value="{{ suspect_keywords|join:',' }}"
+        placeholder="Enter suspect keywords separated by commas"
+      />
+      <button type="submit">Filter</button>
+    </form>
+
+    <h2>AI Filter Suspect Calls</h2>
+    <form method="get">
+      <input
+        type="checkbox"
+        name="use_ai_filter"
+        value="true"
+        {%
+        if
+        use_ai_filter
+        %}checked{%
+        endif
+        %}
+      />
+      Use AI Filter
+      <button type="submit">Filter</button>
+    </form>
+
+    <h2>Call Detail Records</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Call ID</th>
+          <th>Caller Number</th>
+          <th>Callee Number</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Duration (sec)</th>
+          <th>Type</th>
+          <th>Sentiment</th>
+          <th>Score</th>
+          <th>Recording</th>
+          <th>Suspect</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cdr in cdrs %}
+        <tr>
+          <td>{{ cdr.call_id }}</td>
+          <td>{{ cdr.caller_number }}</td>
+          <td>{{ cdr.callee_number }}</td>
+          <td>{{ cdr.call_start_time }}</td>
+          <td>{{ cdr.call_end_time }}</td>
+          <td>{{ cdr.call_duration }}</td>
+          <td>{{ cdr.call_type }}</td>
+          <td>{{ cdr.sentiment_label }}</td>
+          <td>{{ cdr.sentiment_score }}</td>
+          <td>
+            {% if cdr.call_recording %}
+            <a href="{{ cdr.call_recording.url }}" target="_blank">Download</a>
+            {% else %} N/A {% endif %}
+          </td>
+          <td>
+            {% if cdr.is_suspect %}
+            <span class="badge badge-danger">Suspect</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+
+    <h2>Visualizations</h2>
+    <a href="{% url 'cdr_visualization' %}">View Call Frequency Over Time</a>
+    {% endblock %}
   </body>
 </html>
