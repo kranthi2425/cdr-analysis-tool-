@@ -1,0 +1,3 @@
+venv\Scripts\activate
+
+pip install django psycopg2-binary transformers librosa pydub torchaudio pandas plotly

@@ -6,108 +6,291 @@
   <body>
     {% extends 'base.html' %} {% block title %}Call Detail Records{% endblock %}
     {% block heading %}Call Detail Records{% endblock %} {% block content %}
-    <h2>Add New Call Record</h2>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %} {{ form.as_p }}
-      <button type="submit">Add Call Record</button>
-    </form>
+    <div class="container">
+      <h2 class="mt-4">Add New Call Record</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.call_id.label_tag }} {{ form.call_id }} 
+          {% if form.call_id.errors %}
+          <div class="invalid-feedback">{{ form.call_id.errors.as_text }}</div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.caller_number.label_tag }} {{ form.caller_number }} 
+          {% if form.caller_number.errors %}
+          <div class="invalid-feedback">
+            {{ form.caller_number.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.callee_number.label_tag }} {{ form.callee_number }} 
+          {% if form.callee_number.errors %}
+          <div class="invalid-feedback">
+            {{ form.callee_number.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.call_start_time.label_tag }} {{ form.call_start_time }} 
+          {% if form.call_start_time.errors %}
+          <div class="invalid-feedback">
+            {{ form.call_start_time.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.call_end_time.label_tag }} {{ form.call_end_time }} 
+          {% if form.call_end_time.errors %}
+          <div class="invalid-feedback">
+            {{ form.call_end_time.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.call_type.label_tag }} {{ form.call_type }} 
+          {% if form.call_type.errors %}
+          <div class="invalid-feedback">
+            {{ form.call_type.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.call_notes.label_tag }} {{ form.call_notes }} 
+          {% if form.call_notes.errors %}
+          <div class="invalid-feedback">
+            {{ form.call_notes.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.call_recording.label_tag }} {{ form.call_recording }} 
+          {% if form.call_recording.errors %}
+          <div class="invalid-feedback">
+            {{ form.call_recording.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Add Call Record</button>
+      </form>
 
-    <h2>Upload CSV File</h2>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %} {{ csv_form.as_p }}
-      <button type="submit">Upload CSV</button>
-    </form>
+      <hr class="my-4" />
 
-    <h2>Upload Individual Call Record</h2>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %} {{ individual_form.as_p }}
-      <button type="submit">Upload Individual Call Record</button>
-    </form>
+      <h2 class="mt-4">Upload CSV File</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ csv_form.csv_file.label_tag }} {{ csv_form.csv_file }} 
+          {% if csv_form.csv_file.errors %}
+          <div class="invalid-feedback">
+            {{ csv_form.csv_file.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Upload CSV</button>
+      </form>
 
-    <h2>Search Call Records</h2>
-    <form method="get">
-      <input type="text" name="q" value="{{ query }}" placeholder="Search..." />
-      <button type="submit">Search</button>
-    </form>
+      <hr class="my-4" />
 
-    <h2>Filter Suspect Calls</h2>
-    <form method="get">
-      <input
-        type="text"
-        name="suspect_keywords"
-        value="{{ suspect_keywords|join:',' }}"
-        placeholder="Enter suspect keywords separated by commas"
-      />
-      <button type="submit">Filter</button>
-    </form>
+      <h2 class="mt-4">Upload Individual Call Record</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ individual_form.call_id.label_tag }} {{ individual_form.call_id }}
+          {% if individual_form.call_id.errors %}
+          <div class="invalid-feedback">
+            {{ individual_form.call_id.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ individual_form.caller_number.label_tag }} {{
+          individual_form.caller_number }} 
+          {% if individual_form.caller_number.errors %}
+          <div class="invalid-feedback">
+            {{ individual_form.caller_number.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ individual_form.callee_number.label_tag }} {{
+          individual_form.callee_number }} 
+          {% if individual_form.callee_number.errors %}
+          <div class="invalid-feedback">
+            {{ individual_form.callee_number.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ individual_form.call_start_time.label_tag }} {{
+          individual_form.call_start_time }} 
+          {% if individual_form.call_start_time.errors %}
+          <div class="invalid-feedback">
+            {{ individual_form.call_start_time.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ individual_form.call_end_time.label_tag }} {{
+          individual_form.call_end_time }} 
+          {% if individual_form.call_end_time.errors %}
+          <div class="invalid-feedback">
+            {{ individual_form.call_end_time.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ individual_form.call_type.label_tag }} {{ individual_form.call_type
+          }} 
+          {% if individual_form.call_type.errors %}
+          <div class="invalid-feedback">
+            {{ individual_form.call_type.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ individual_form.call_recording.label_tag }} {{
+          individual_form.call_recording }} 
+          {% if individual_form.call_recording.errors %}
+          <div class="invalid-feedback">
+            {{ individual_form.call_recording.errors.as_text }}
+          </div>
+          {% endif %}
+        </div>
+        <button
+          type="submit"
+          name="individual_call_recording"
+          class="btn btn-primary"
+        >
+          Upload Individual Call Record
+        </button>
+      </form>
 
-    <h2>AI Filter Suspect Calls</h2>
-    <form method="get">
-      <input
-        type="checkbox"
-        name="use_ai_filter"
-        value="true"
-        {%
-        if
-        use_ai_filter
-        %}checked{%
-        endif
-        %}
-      />
-      Use AI Filter
-      <button type="submit">Filter</button>
-    </form>
+      <hr class="my-4" />
 
-    <h2>Call Detail Records</h2>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Call ID</th>
-          <th>Caller Number</th>
-          <th>Callee Number</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Duration (sec)</th>
-          <th>Type</th>
-          <th>Sentiment</th>
-          <th>Score</th>
-          <th>Recording</th>
-          <th>Notes</th>
-          <th>Summary</th>
-          <th>Suspect</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for cdr in cdrs %}
-        <tr>
-          <td>{{ cdr.call_id }}</td>
-          <td>{{ cdr.caller_number }}</td>
-          <td>{{ cdr.callee_number }}</td>
-          <td>{{ cdr.call_start_time }}</td>
-          <td>{{ cdr.call_end_time }}</td>
-          <td>{{ cdr.call_duration }}</td>
-          <td>{{ cdr.call_type }}</td>
-          <td>{{ cdr.sentiment_label }}</td>
-          <td>{{ cdr.sentiment_score }}</td>
-          <td>
-            {% if cdr.call_recording %}
-            <a href="{{ cdr.call_recording.url }}" target="_blank">Download</a>
-            {% else %} N/A {% endif %}
-          </td>
-          <td>{{ cdr.call_notes }}</td>
-          <td>{{ cdr.summary }}</td>
-          <td>
-            {% if cdr.is_suspect %}
-            <span class="badge badge-danger">Suspect</span>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <h2 class="mt-4">Search Call Records</h2>
+      <form method="get" class="form-inline">
+        <div class="form-group mb-2">
+          <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            class="form-control"
+            placeholder="Search..."
+          />
+        </div>
+        <button type="submit" class="btn btn-secondary mb-2 ml-2">
+          Search
+        </button>
+      </form>
 
-    <h2>Visualizations</h2>
-    <a href="{% url 'cdr_visualization' %}">View Call Frequency Over Time</a>
+      <hr class="my-4" />
+
+      <h2 class="mt-4">Filter Suspect Calls</h2>
+      <form method="get" class="form-inline">
+        <div class="form-group mb-2">
+          <input
+            type="text"
+            name="suspect_keywords"
+            value="{{ suspect_keywords|join:',' }}"
+            class="form-control"
+            placeholder="Enter suspect keywords separated by commas"
+          />
+        </div>
+        <button type="submit" class="btn btn-secondary mb-2 ml-2">
+          Filter
+        </button>
+      </form>
+
+      <hr class="my-4" />
+
+      <h2 class="mt-4">AI Filter Suspect Calls</h2>
+      <form method="get" class="form-inline">
+        <div class="form-group form-check mb-2">
+          <input
+            type="checkbox"
+            name="use_ai_filter"
+            value="true"
+            {%
+            if
+            use_ai_filter
+            %}checked{%
+            endif
+            %}
+            class="form-check-input"
+          />
+          <label class="form-check-label" for="use_ai_filter"
+            >Use AI Filter</label
+          >
+        </div>
+        <button type="submit" class="btn btn-secondary mb-2 ml-2">
+          Filter
+        </button>
+      </form>
+
+      <hr class="my-4" />
+
+      <h2 class="mt-4">Call Detail Records</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Call ID</th>
+            <th>Caller Number</th>
+            <th>Callee Number</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Duration (sec)</th>
+            <th>Type</th>
+            <th>Sentiment</th>
+            <th>Score</th>
+            <th>Recording</th>
+            <th>Notes</th>
+            <th>Summary</th>
+            <th>Suspect</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cdr in cdrs %}
+          <tr>
+            <td>{{ cdr.call_id }}</td>
+            <td>{{ cdr.caller_number }}</td>
+            <td>{{ cdr.callee_number }}</td>
+            <td>{{ cdr.call_start_time }}</td>
+            <td>{{ cdr.call_end_time }}</td>
+            <td>{{ cdr.call_duration }}</td>
+            <td>{{ cdr.call_type }}</td>
+            <td>{{ cdr.sentiment_label }}</td>
+            <td>{{ cdr.sentiment_score }}</td>
+            <td>
+              {% if cdr.call_recording %}
+              <a
+                href="{{ cdr.call_recording.url }}"
+                target="_blank"
+                class="btn btn-sm btn-info"
+                >Download</a
+              >
+              {% else %} N/A {% endif %}
+            </td>
+            <td>{{ cdr.call_notes }}</td>
+            <td>{{ cdr.summary }}</td>
+            <td>
+              {% if cdr.is_suspect %}
+              <span class="badge badge-danger">Suspect</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <hr class="my-4" />
+
+      <h2 class="mt-4">Visualizations</h2>
+      <a href="{% url 'cdr_visualization' %}" class="btn btn-success"
+        >View Call Frequency Over Time</a
+      >
+    </div>
     {% endblock %}
   </body>
 </html>

@@ -7,13 +7,27 @@ from django.db.models import Q
 import os
 import pandas as pd
 import plotly.express as px
+from transformers import pipeline  # Import pipeline from transformers
+import librosa
+import torch
+from pydub import AudioSegment
 
 def transcribe_audio(file_path):
     try:
+        print(f"Transcribing file: {file_path}")
+        
+        # Convert MP3 to WAV if necessary
+        if file_path.endswith('.mp3'):
+            wav_file_path = file_path.rsplit('.', 1)[0] + '.wav'
+            audio = AudioSegment.from_mp3(file_path)
+            audio.export(wav_file_path, format="wav")
+            file_path = wav_file_path
+        
         transcriber = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-large-960h-lv60-self")
         audio, sample_rate = librosa.load(file_path, sr=16000)
         audio_tensor = torch.tensor(audio).unsqueeze(0)
         result = transcriber(audio_tensor)
+        print(f"Transcription result: {result['text']}")
         return result['text']
     except Exception as e:
         print(f"Error transcribing audio: {e}")
@@ -106,22 +120,32 @@ def cdr_list(request):
                         cdr.is_suspect = flag_suspect_calls_with_ai([cdr])[0].is_suspect if cdr.call_notes else False
                     cdr.save()
                 return redirect('cdr_list')
-        elif 'individual_call_recording' in request.FILES:
+        elif 'individual_call_recording' in request.POST:
+            print("Individual call recording form submitted")
             individual_form = IndividualCallRecordForm(request.POST, request.FILES)
             if individual_form.is_valid():
+                print("Form is valid")
                 cdr = individual_form.save(commit=False)
-                if cdr.call_recording:
+                if 'call_recording' in request.FILES:
+                    print("Call recording file is present")
+                    cdr.call_recording = request.FILES['call_recording']
                     fs = FileSystemStorage()
                     filename = fs.save(cdr.call_recording.name, cdr.call_recording)
                     uploaded_file_url = fs.url(filename)
                     file_path = os.path.join(fs.location, filename)
                     transcription = transcribe_audio(file_path)
+                    print(f"Transcription: {transcription}")
                     cdr.call_notes = transcription
                     cdr.sentiment_label, cdr.sentiment_score = analyze_sentiment(transcription)
                     cdr.summary = summarize_text(transcription)
                     cdr.is_suspect = flag_suspect_calls_with_ai([cdr])[0].is_suspect if cdr.call_notes else False
+                else:
+                    print("No call recording file uploaded")
                 cdr.save()
                 return redirect('cdr_list')
+            else:
+                print("Form is invalid")
+                print(individual_form.errors)
     else:
         form = CallDetailRecordForm()
         csv_form = CSVUploadForm()
