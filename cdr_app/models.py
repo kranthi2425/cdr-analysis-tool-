@@ -6,7 +6,6 @@ class CallDetailRecord(models.Model):
     callee_number = models.CharField(max_length=20)
     call_start_time = models.DateTimeField()
     call_end_time = models.DateTimeField()
-    call_duration = models.IntegerField()  # in seconds
     call_type = models.CharField(max_length=20, choices=[
         ('incoming', 'Incoming'),
         ('outgoing', 'Outgoing'),
@@ -18,6 +17,13 @@ class CallDetailRecord(models.Model):
     sentiment_label = models.CharField(max_length=20, blank=True, null=True)  # Sentiment label from sentiment analysis
     sentiment_score = models.FloatField(blank=True, null=True)  # Sentiment score from sentiment analysis
     is_suspect = models.BooleanField(default=False)  # Flag to mark suspect calls
+    summary = models.TextField(blank=True, null=True)  # Summary of the call
 
     def __str__(self):
         return f"Call ID: {self.call_id}"
+
+    @property
+    def call_duration(self):
+        if self.call_start_time and self.call_end_time:
+            return int((self.call_end_time - self.call_start_time).total_seconds())
+        return 0

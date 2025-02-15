@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CDR Visualization</title>
+    <!-- Include Plotly.js for visualizations -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5">Call Detail Record (CDR) Visualization</h1>
+      <div id="call-frequency" class="mb-5"></div>
+      <div id="call-type-distribution"></div>
+    </div>
+
+    <script>
+      // Example: Render a histogram for call frequency over time using Plotly
+      const callFrequencyData = [
+          {
+              x: {{ call_start_times|safe }},
+              y: {{ call_counts|safe }},
+              type: 'bar'
+          }
+      ];
+
+      const callFrequencyLayout = {
+          title: 'Call Frequency Over Time',
+          xaxis: { title: 'Date' },
+          yaxis: { title: 'Number of Calls' }
+      };
+
+      Plotly.newPlot('call-frequency', callFrequencyData, callFrequencyLayout);
+
+      // Example: Render a pie chart for call type distribution using Plotly
+      const callTypeDistributionData = [
+          {
+              labels: {{ call_types|safe }},
+              values: {{ call_type_counts|safe }},
+              type: 'pie'
+          }
+      ];
+
+      const callTypeDistributionLayout = {
+          title: 'Call Type Distribution'
+      };
+
+      Plotly.newPlot('call-type-distribution', callTypeDistributionData, callTypeDistributionLayout);
+    </script>
+  </body>
+</html>
