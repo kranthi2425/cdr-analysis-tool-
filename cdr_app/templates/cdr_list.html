@@ -6,8 +6,8 @@
   <body>
     {% extends 'base.html' %} {% block title %}Call Detail Records{% endblock %}
     {% block heading %}Call Detail Records{% endblock %} {% block content %}
-    <div class="container">
-      <h2 class="mt-4">Add New Call Record</h2>
+    <div class="m-5 mt-0">
+      <h2 class="">Add New Call Record</h2>
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
