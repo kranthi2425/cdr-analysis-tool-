@@ -18,3 +18,8 @@ ENV/
 
 # Ignore environment variables
 .env
+# Local artifacts
+recording.mp3
+*.zip
+*.session.sql
+.env
